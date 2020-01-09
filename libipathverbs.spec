@@ -12,7 +12,7 @@ Patch0: libipathverbs-1.3-modprobe.patch
 Patch1: libipathverbs-1.3-dracut.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: libibverbs-devel >= 1.1.3, valgrind-devel, dracut
-#BuildRequires:autoconf, automake, libtool
+#BuildRequires: autoconf, automake, libtool
 ExclusiveArch: x86_64
 Obsoletes: %{name}-devel
 Provides: libibverbs-driver.%{_arch}
@@ -75,11 +75,7 @@ rm -rf %{buildroot}
 - Related: bz1024903
 
 * Wed Jul 30 2014 Doug Ledford <dledford@redhat.com> - 1.3-1
-- Pick up real upstream tarball release
-- Related: bz1024903
-
-* Thu Jul 24 2014 Doug Ledford <dledford@redhat.com> - 1.2-6
-- Bump and rebuild against latest libibverbs
+- Grab official tarball
 - Related: bz1024903
 
 * Wed Jul 23 2014 Doug Ledford <dledford@redhat.com> - 1.2-5
