@@ -1,16 +1,22 @@
+%global dracutdir %{_prefix}/share/dracut/modules.d
+
 Name: libipathverbs
-Version: 1.2
-Release: 4%{?dist}
+Version: 1.3
+Release: 3%{?dist}
 Summary: QLogic InfiniPath HCA Userspace Driver
 Group: System Environment/Libraries
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
+Patch0: libipathverbs-1.3-modprobe.patch
+Patch1: libipathverbs-1.3-dracut.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: libibverbs-devel >= 1.1.3, valgrind-devel
+BuildRequires: libibverbs-devel >= 1.1.3, valgrind-devel, dracut
+#BuildRequires:autoconf, automake, libtool
 ExclusiveArch: x86_64
 Obsoletes: %{name}-devel
 Provides: libibverbs-driver.%{_arch}
+Requires: /bin/bash
 %description
 QLogic hardware driver for use with libibverbs user space verbs access
 library.  This driver supports QLogic InfiniPath based cards.
@@ -25,24 +31,32 @@ application.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
+#./autogen.sh
 %configure --with-valgrind
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%makeinstall
+rm -rf %{buildroot}
+make DESTDIR=%{buildroot} install
 # remove unpackaged files from the buildroot
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+rm -f %{buildroot}%{_libdir}/*.la
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
 %{_libdir}/*.so*
 %{_sysconfdir}/libibverbs.d/*.driver
+%{_sysconfdir}/modprobe.d/truescale.conf
+%dir %{dracutdir}/90qib
+%{dracutdir}/90qib/*
+%{_sbindir}/truescale-serdes.cmds
+
 %doc AUTHORS COPYING README
 
 %files static
@@ -50,6 +64,29 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
+* Thu Sep 11 2014 Doug Ledford <dledford@redhat.com> - 1.3-3
+- Add missing files to dracut install command, including bash
+  as the truescale-serdes.cmds will not work with dash and
+  can not be reasonably ported to dash.
+- Related: bz1024903
+
+* Thu Aug 07 2014 Doug Ledford <dledford@redhat.com> - 1.3-2
+- The modprobe file needs a full path or else modprobe fails
+- Related: bz1024903
+
+* Wed Jul 30 2014 Doug Ledford <dledford@redhat.com> - 1.3-1
+- Pick up real upstream tarball release
+- Related: bz1024903
+
+* Thu Jul 24 2014 Doug Ledford <dledford@redhat.com> - 1.2-6
+- Bump and rebuild against latest libibverbs
+- Related: bz1024903
+
+* Wed Jul 23 2014 Doug Ledford <dledford@redhat.com> - 1.2-5
+- Update to git repo archive from upstream
+- Add truescale-serdes.cmds and related code from git archive
+- Resolves: bz1024903
+
 * Mon Jan 23 2012 Doug Ledford <dledford@redhat.com> - 1.2-4
 - Bump and rebuild against latest libibverbs
 - Related: bz750609
