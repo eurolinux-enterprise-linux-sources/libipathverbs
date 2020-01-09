@@ -1,6 +1,6 @@
 Name: libipathverbs
 Version: 1.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: QLogic InfiniPath HCA Userspace Driver
 Group: System Environment/Libraries
 License: GPLv2 or BSD
@@ -50,6 +50,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
+* Mon Jan 23 2012 Doug Ledford <dledford@redhat.com> - 1.2-4
+- Bump and rebuild against latest libibverbs
+- Related: bz750609
+
 * Mon Jul 25 2011 Doug Ledford <dledford@redhat.com> - 1.2-3.el6
 - Add missing arch macro to libibverbs-driver provide
 - Related: bz725016
