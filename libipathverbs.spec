@@ -1,6 +1,6 @@
 Name: libipathverbs
 Version: 1.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: QLogic InfiniPath HCA Userspace Driver
 Group: System Environment/Libraries
 License: GPLv2 or BSD
@@ -10,6 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: libibverbs-devel >= 1.1.3, valgrind-devel
 ExclusiveArch: x86_64
 Obsoletes: %{name}-devel
+Provides: libibverbs-driver.%{_arch}
 %description
 QLogic hardware driver for use with libibverbs user space verbs access
 library.  This driver supports QLogic InfiniPath based cards.
@@ -49,6 +50,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
+* Mon Jul 25 2011 Doug Ledford <dledford@redhat.com> - 1.2-3.el6
+- Add missing arch macro to libibverbs-driver provide
+- Related: bz725016
+
 * Mon Jan 25 2010 Doug Ledford <dledford@redhat.com> - 1.2-2.el6
 - Minor updates for pkgwrangler review
 - Related: bz543948
