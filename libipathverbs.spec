@@ -1,13 +1,18 @@
+%global dracutdir %{_prefix}/lib/dracut/modules.d
+
 Name: libipathverbs
-Version: 1.2
-Release: 8%{?dist}
+Version: 1.3
+Release: 2%{?dist}
 Summary: QLogic InfiniPath HCA Userspace Driver
 Group: System Environment/Libraries
 License: GPLv2 or BSD
 Url: http://www.openfabrics.org/
 Source: http://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
+Patch0: libipathverbs-1.3-modprobe.patch
+Patch1: libipathverbs-1.3-dracut.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: libibverbs-devel > 1.1.4, valgrind-devel
+BuildRequires: libibverbs-devel > 1.1.4, valgrind-devel, dracut
+Requires: /bin/bash, rdma
 ExclusiveArch: x86_64
 Provides: libibverbs-driver.%{_arch}
 %description
@@ -24,24 +29,30 @@ application.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 %configure --with-valgrind
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%makeinstall
+rm -rf %{buildroot}
+make DESTDIR=%{buildroot} install
 # remove unpackaged files from the buildroot
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+rm -f %{buildroot}%{_libdir}/*.la
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
 %{_libdir}/*.so*
 %{_sysconfdir}/libibverbs.d/*.driver
+%{_sysconfdir}/modprobe.d/truescale.conf
+%dir %{dracutdir}/90qib
+%{dracutdir}/90qib/*
+%{_sbindir}/truescale-serdes.cmds
 %doc AUTHORS COPYING README
 
 %files static
@@ -49,6 +60,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
+* Tue Dec 23 2014 Doug Ledford <dledford@redhat.com> - 1.3-2
+- Add requires on rdma package
+- Related: bz1164618
+
+* Fri Oct 17 2014 Doug Ledford <dledford@redhat.com> - 1.3-1
+- Update to latest upstream release and build against latest libibverbs
+- Resolve mezzanine configure issue (1085946)
+- Related: bz1137044
+
 * Mon Mar 03 2014 Doug Ledford <dledford@redhat.com> - 1.2-8
 - Bump and rebuild against latest libibverbs
 - Related: bz1062281

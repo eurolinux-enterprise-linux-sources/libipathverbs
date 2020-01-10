@@ -34,7 +34,7 @@
 # combinations of this program with other software, or any other
 # product whatsoever.
 
-%define ver @VERSION@
+%define ver 1.3
 %define RELEASE 1
 %define rel %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 %define with_dracut %(if rpm -qa | grep -q dracut; then echo 1; else echo 0; fi)

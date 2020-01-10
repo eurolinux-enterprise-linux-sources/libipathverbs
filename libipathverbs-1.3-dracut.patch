@@ -1,0 +1,19 @@
+diff -up libipathverbs-1.3/dracut_install.fix libipathverbs-1.3/dracut_install
+--- libipathverbs-1.3/dracut_install.fix	2014-09-11 13:06:01.490355627 -0400
++++ libipathverbs-1.3/dracut_install	2014-09-11 14:36:51.860462711 -0400
+@@ -11,3 +11,6 @@ inst /usr/bin/logger
+ inst /usr/sbin/dmidecode
+ inst /bin/readlink
+ inst /bin/echo
++inst /usr/bin/tail
++inst /usr/bin/printf
++inst /bin/bash
+diff -up libipathverbs-1.3/truescale-serdes.cmds.fix libipathverbs-1.3/truescale-serdes.cmds
+--- libipathverbs-1.3/truescale-serdes.cmds.fix	2014-09-11 13:06:48.604898389 -0400
++++ libipathverbs-1.3/truescale-serdes.cmds	2014-09-11 14:37:53.886860812 -0400
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # Copyright (c) 2013 Intel Corporation. All rights reserved.
+ # Copyright (c) 2010 QLogic Corporation.
+ # All rights reserved.
