@@ -1,6 +1,6 @@
 Name: libipathverbs
 Version: 1.2
-Release: 6%{?dist}
+Release: 8%{?dist}
 Summary: QLogic InfiniPath HCA Userspace Driver
 Group: System Environment/Libraries
 License: GPLv2 or BSD
@@ -49,6 +49,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
+* Mon Mar 03 2014 Doug Ledford <dledford@redhat.com> - 1.2-8
+- Bump and rebuild against latest libibverbs
+- Related: bz1062281
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.2-7
+- Mass rebuild 2013-12-27
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
